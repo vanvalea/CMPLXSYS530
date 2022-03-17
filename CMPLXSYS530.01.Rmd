@@ -1,0 +1,16 @@
+---
+title: "Lab 1"
+author: "Ethan VanValkenburg"
+date: "1/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*For each problem, include the written answer to the problem, a screenshot of the model behavior, and the “code” (a screenshot or listing of the rules and model/environment setup).*
+
+## Part 1
+
+### Problem 1A)

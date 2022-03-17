@@ -1,0 +1,659 @@
+---
+title: "Lab 1"
+author: "Ethan VanValkenburg"
+date: "1/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*For each problem, include the written answer to the problem, a screenshot of the model behavior, and the “code” (a screenshot or listing of the rules and model/environment setup).*
+
+# Part 1
+
+### Problem 1A)
+
+
++ This Schelling Model explores the behaviour of crabs and fish. Both types were subject to the same rules. If less than 2 of the neighbors are of the same type (20% of its neighbors must be the same type), move to any random open spot and leave behind an empty spot. The environment is 35 X 35 and neighbors include the 8 adjacent squares.
+
++ To begin, the crabs and fish are randomly distributed across the environment. Quickly, they begin to organize themselves around similiar neighbors. After only few timesteps, the community is largely set, with only few remaining individuals shifting around the board. It doesn't take long for the community to reach equilibrium and remain unchanged. While there is a slight pattern with some grouping, there is still plenty of mixing between fish and crabs.
+
++ [Link to the simulation](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAjNkguOYwCghQZhAAvsmosMIF8ADaoNhIWcnY6CRkSSDEMJBk9vhKqLiEUIMw6AQkLa0AuskoGDj4RKTwILruHtJyYK7lxADWIPUdXfCFPX27IIB8G4ABu4PDo3tYMKqDGyweEWzwAwuZehdpE8grgYI1jDJGMQIJ47A5nPBeOx5vBGLhMGhUDoSNVCOYANR9MBgeRIClTeYQXgAeSgB0weL6uCUOUwhFO-AxeAgSGwMAAdIRMAY5gsdstQHEDM8ADyfUxgBAAJgaTQgrAAImRCnKQYqQIz0BATYMpjNmPqjd0QJYYAA3CCOmDCZ3wEpQBS4G17ByegD6UEI1zWIEDwbI2By4ZR2AMunUmBjNxAnR1j36e0AvBuAfB3PiMQyActhULoAWggdtCyBwZDoSRYfDhNJZCi0fYnNgscQceg8QSiSShPzKdTacR6VbmcQ2RyuYQeYw+QLGELB8GxZLpbLkvNzQh2pa02qNVr4LrLU7jXttWaFRelXDrbaGtMoN7fWfEo3U9ACDSA5J40rMMIEjaNaljKDE2TVN00zbNY08aVzDuUBTFwJAfUrOIwAsWAUWiApklQjNpV0QhCDucAGMJQYCQ3aVzzaJUnxdOFMCgFoAGYhJzRoiL9B5ShgAThIAFjE3j72SfjBIQESEIabAAC8Q1ATxOnZdSAFZkgONNdFmeAhOM2o7KAA)
+
+```{r}
+knitr::include_graphics('./1a_lab1.png')
+```
+
+
+### Problem 1B)
+
++ Varying the model between 1 and 8 produces very different results. The example above illustrates a community where individuals require at least 2 of their neighbors to be of the same type. At 3, clearer groupings occur and  it also reaches a stable state. There is still some mixing between the fish and the crabs, but they  appear in obvious clumps. With at least 4 neighbors, groupings become even larger and segregated. Now ~2 homogenous communities develop for both fish and crabs. Some stragglers still flicker in the periphery.
+
+```{r,  fig.show="hold", out.width="50%"}
+knitr::include_graphics('./1b_3.png')
+knitr::include_graphics('./1b_4.png')
+```
+
+
+
++ At 5 neighbors, two distinct groups develop that are completed seperated. A few fish and crabs can't find a home and flash around the outside of the homogenous communities. It is difficult to maintain a constant border around a single blob. At 6,7, and 8 neighbors, the crabs and fish do not reach any sort of equilibrium. Each crab and fish must switch places at almost every time step.
+
+```{r,  fig.show="hold", out.width="50%"}
+knitr::include_graphics('./1b_5.png')
+knitr::include_graphics('./1b_6.png')
+```
+
++ The code for this questions is the same as that of **1A** with the rules modified slightly.
+
+### Problem 1c)
+
++ For adjusting the whitespace, I decided to stick with the rule of requiring at least *half* of the neighbors to be of the same type.
+
++ Generally, as the amount of whitespace increases, the system takes longer to reach equilibrium. If no whitespace is allowed, the fish and crab can't move and nothing happens. If even a small proportion of the spaces are blank, communities will quickly sort into continuous, homogeneous blobs. 
+
+```{r}
+knitr::include_graphics('./1c_1.png')
+```
+
++ At roughly equal proportions fish, whitespace, and crabs, it takes longer to find a state of equilibrium. They eventually do and it tends to include more discrete blobs.
+
+```{r}
+knitr::include_graphics('./1c_2.png')
+```
+
++ At a high proportion of whitespace, it takes much longer to start to grow communities and reach equilibrium. When a set of crabs or fish randomly are placed in such a way that enough individuals are adjacent, a blob will start to form and grow, attracting the rest of the individuals in the population. Eventually, a few discrete blobs form and remain.
+
+```{r}
+knitr::include_graphics('./1c_3.png')
+```
+
+
++ [Example code](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAbNkguOYwCghQZhAAvsmosMIF8ADaoNhIWcnY6CRkSSDEMJBk9vhKqLiEUIMw6AQkLa0AuskoGDj4RKTwILruHtJyYK7lxADWIPUdXfAAjD19uyCAfBuAAbuDw6N7WDCqgw2WDwixeAGFzL0LtJnkFcDBGsYZIxiBBPHYHM54Lx2PN4IxcJg0KgdCRqoRzABqPpgMDyJCUqbzCC8ADyUAOmHxfVwShymEIp34mLwECQ2BgADpCJgDHMFjtlqA4gYXgAeL6mMAIAAsDSaEFYABEyPd5aClSAmegIKbBlMZswDcbuiBLDAAG4QJ0wYQu+AlKAKXC2vYOL0AfSghGuaxAQZDZGwOQjqOwBl06kwsZuIE6CAATE9+ntALwbgHwdr4jUMgHLYVC6QFoYHbEsgCFQmEkOEI4TSWSo9H2JzYbHEXHofGE4mkoQCqk0unEBnWlnEdmc7mEXmMfmCxjCkch8VSmVy5LzC0IdpW9PqzXa+B6q3Ok17AvmxXX5Xwm12hrTFAPp+m+JTul6wGGqByQJjW4YQFGMa1HGsFJimaYZlmOZxp4MrmHcoCmLgSC+jWcRgBYsCotEBTJBhmYyrohCEHc4DMUSgyEtuMpXm0yqvq68KYFALQAOyZLmjSkf6jylDAwktPcACskkCfARZyQpCDKchDTYAAXqGoCeJ0HIIAAzEpyQHOmuizPAlm1E5QA)
+
+
+### Problem 1d
+
+*I forgot to include pictures for the examples below. Clicking on the hyperlinks will take you to the models in the browser and they should appear as described in the text.*
+
++ For this example, animals move if more than 6 are of the other type. This changes the patterns and dynamics of the model.
+
++ First of all, animals are perfectly content with whitespace, so the crabs and fish do not tend towards groupings. Instead, whitespace becomes evenly distributed across board. Whitespace and an individual of the same type counts the same. As a result, the pattern is less obvious and the types (whitespace, fish, crabs) appear to far more evenly distributed around the board, rather than grouped with those of the same type--especially for higher proportions of white space. This is the [example code](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAjNkguOYwCghQZhAAvsmosMIF8ADaoNhIWcnY6CRkSSDEMJBk9vhKqLiEUIMw6AQkLa0AuskoGDj4RKTwILruHtJyYK7lxADWIPUdXfCFPX27IIB8G4ABu4PDo3tYMKqDGyweEWzwAwuZehdpE8grgYI1jDJGMQIJ47A5nPBeOx5vBGLhMGhUDoSNVCOYANR9MBgeRIClTeYQXgAeSgB0weL6uCUOUwhFO-AxeAgSGwMAAdIRMAY5gsdstQHEDM8AHyfUxgBAANgaTQgrAAImQAExykGKkCM9AQMiFQZTGbMfVG7ogSwwABuEGdMGErvgJSgClwtr2Dm9AH0oIRzQqEKtamsQMHQ2RsDlIyjsAZdOpMNcVjcQJ0ECbHv09oBeDcA+DufEZhkA5bCoXQAtBA7aVkDgyHQkiw+HCaSyFFo+xObBY4g49B4glEklCfmU6m04j063M4hsjlcwg8xh8gWMIWT0NiyXS2XJeYWhNKnNqjVa+C6q0u417e23+VLB9WnCNp2g60xQL6-pfiUHrehBBpQckqaNhGEDRrGv73m0RbJkh6aZtmub5oWSbJJ40rmHcoCmLgSB+o2cRgBYsAotEBTJARebSrohCEHc4A8YSgwEge0qYe0H50QGJRwpgUAtAAzCaxaNJJX4PKUMCyQpADsymfmWyQyXJCDyYUJFWtgABeYagJ4nTsiZACsyQHDmuizPA8mObUPlAA)
+
++ A more clear pattern emerges as the rules--the number of neighbors allowed to be of a different type--changes. If more than 4 of the neighbors are of the different type and the animal is required to move, than largely continuous strands and clumps of the same type appear in the [model](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAjNkguOYwCghQZhAAvsmosMIF8ADaoNhIWcnY6CRkSSDEMJBk9vhKqLiEUIMw6AQkLa0AuskoGDj4RKTwILruHtJyYK7lxADWIPUdXfCFPX27IIB8G4ABu4PDo3tYMKqDGyweEWzwAwuZehdpE8grgYI1jDJGMQIJ47A5nPBeOx5vBGLhMGhUDoSNVCOYANR9MBgeRIClTeYQXgAeSgB0weL6uCUOUwhFO-AxeAgSGwMAAdIRMAY5gsdstQHEDM8AHyfUxgBAANgaTQgrAAImQAExykGKkCM9AQMiFQZTGbMfVG7ogSwwABuEGdMGErvgJSgClwtr2Dm9AH0oIRzQqEKtamsQMHQ2RsDlIyjsAZdOpMNcVjcQJ0ECbHv09oBeDcA+DufEZhkA5bCoXQAtBA7aVkDgyHQkiw+HCaSyFFo+xObBY4g49B4glEklCfmU6m04j063M4hsjlcwg8xh8gWMIWT0NiyXS2XJeYWhNKnNqjVa+C6q0u417e23+VLB9WnCNp2g60xQL6-pfiUHrehBBpQckqaNhGEDRrGv73m0RbJkh6aZtmub5oWSbJJ40rmHcoCmLgSB+o2cRgBYsAotEBTJARebSrohCEHc4A8YSgwEge0qYe0H50QGJRwpgUAtAAzCaxaNJJX4PKUMCyQpADsymfmWyQyXJCDyYUJFWtgABeYagJ4nTsiZACsyQHDmuizPA8mObUPlAA). This is especially true if there is little whitespace.
+
++ For a model where an individual moves when more than 2 are of the different type, another pattern emerges. Individuals surround themselves with whitespace or the same type, leaving mostly whitespace barriers around continuous clumps of crabs or fish. This is the [model](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAjNkguOYwCghQZhAAvsmosMIF8ADaoNhIWcnY6CRkSSDEMJBk9vhKqLiEUIMw6AQkLa0AuskoGDj4RKTwILruHtJyYK7lxADWIPUdXfCFPX27IIB8G4ABu4PDo3tYMKqDGyweEWzwAwuZehdpE8grgYI1jDJGMQIJ47A5nPBeOx5vBGLhMGhUDoSNVCOYANR9MBgeRIClTeYQXgAeSgB0weL6uCUOUwhFO-AxeAgSGwMAAdIRMAY5gsdstQHEDM8AHyfUxgBAANgaTQgrAAImQAExykGKkCM9AQMiFQZTGbMfVG7ogSwwABuEGdMGErvgJSgClwtr2Dm9AH0oIRzQqEKtamsQMHQ2RsDlIyjsAZdOpMNcVjcQJ0ECbHv09oBeDcA+DufEZhkA5bCoXQAtBA7aVkDgyHQkiw+HCaSyFFo+xObBY4g49B4glEklCfmU6m04j063M4hsjlcwg8xh8gWMIWT0NiyXS2XJeYWhNKnNqjVa+C6q0u417e23+VLB9WnCNp2g60xQL6-pfiUHrehBBpQckqaNhGEDRrGv73m0RbJkh6aZtmub5oWSbJJ40rmHcoCmLgSB+o2cRgBYsAotEBTJARebSrohCEHc4A8YSgwEge0qYe0H50QGJRwpgUAtAAzCaxaNJJX4PKUMCyQpADsymfmWyQyXJCDyYUJFWtgABeYagJ4nTsiZACsyQHDmuizPA8mObUPlAA)
+
++ For the model descibed immediately above, decreasing the amount of whitespace creates fewer and larger groupings of crabs and fish. The barriers between the groups are more unstable and take a long time to form. Eventually, they settle and are completely seperated.
+
++ Generally, less whitespace creates distinct patterns where crabs crowd around crabs and fish crowd around fish. Some whitespace exists between the groups. This is an [emample](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAjNkguOYwCghQZhAAvsmosMIF8ADaoNhIWcnY6CRkSSDEMJBk9vhKqLiEUIMw6AQkLa0AuskoGDj4RKTwILruHtJyYK7lxADWIPUdXfCFPX27IIB8G4ABu4PDo3tYMKqDGyweEWzwAwuZehdpE8grgYI1jDJGMQIJ47A5nPBeOx5vBGLhMGhUDoSNVCOYANR9MBgeRIClTeYQXgAeSgB0weL6uCUOUwhFO-AxeAgSGwMAAdIRMAY5gsdstQHEDM8AHyfUxgBAANgaTQgrAAImQAExykGKkCM9AQMiFQZTGbMfVG7ogSwwABuEGdMGErvgJSgClwtr2Dm9AH0oIRzQqEKtamsQMHQ2RsDlIyjsAZdOpMNcVjcQJ0ECbHv09oBeDcA+DufEZhkA5bCoXQAtBA7aVkDgyHQkiw+HCaSyFFo+xObBY4g49B4glEklCfmU6m04j063M4hsjlcwg8xh8gWMIWT0NiyXS2XJeYWhNKnNqjVa+C6q0u417e23+VLB9WnCNp2g60xQL6-pfiUHrehBBpQckqaNhGEDRrGv73m0RbJkh6aZtmub5oWSbJJ40rmHcoCmLgSB+o2cRgBYsAotEBTJARebSrohCEHc4A8YSgwEge0qYe0H50QGJRwpgUAtAAzCaxaNJJX4PKUMCyQpADsymfmWyQyXJCDyYUJFWtgABeYagJ4nTsiZACsyQHDmuizPA8mObUPlAA). As the amount of whitespace increases, the patterns are less obvious and it takes less time for the model to reach an equilibrium. In those sitautions, crabs and fish are perfectly content with their own type and whitespace, so they end up *appearing* randomly distributed across the board. Here is an [example](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAjNkguOYwCghQZhAAvsmosMIF8ADaoNhIWcnY6CRkSSDEMJBk9vhKqLiEUIMw6AQkLa0AuskoGDj4RKTwILruHtJyYK7lxADWIPUdXfCFPX27IIB8G4ABu4PDo3tYMKqDGyweEWzwAwuZehdpE8grgYI1jDJGMQIJ47A5nPBeOx5vBGLhMGhUDoSNVCOYANR9MBgeRIClTeYQXgAeSgB0weL6uCUOUwhFO-AxeAgSGwMAAdIRMAY5gsdstQHEDM8AHyfUxgBAANgaTQgrAAImQAExykGKkCM9AQMiFQZTGbMfVG7ogSwwABuEGdMGErvgJSgClwtr2Dm9AH0oIRzQqEKtamsQMHQ2RsDlIyjsAZdOpMNcVjcQJ0ECbHv09oBeDcA+DufEZhkA5bCoXQAtBA7aVkDgyHQkiw+HCaSyFFo+xObBY4g49B4glEklCfmU6m04j063M4hsjlcwg8xh8gWMIWT0NiyXS2XJeYWhNKnNqjVa+C6q0u417e23+VLB9WnCNp2g60xQL6-pfiUHrehBBpQckqaNhGEDRrGv73m0RbJkh6aZtmub5oWSbJJ40rmHcoCmLgSB+o2cRgBYsAotEBTJARebSrohCEHc4A8YSgwEge0qYe0H50QGJRwpgUAtAAzCaxaNJJX4PKUMCyQpADsymfmWyQyXJCDyYUJFWtgABeYagJ4nTsiZACsyQHDmuizPA8mObUPlAA).
+
+**Here is another fun pattern I found while messing with the rules:**
+
++ [Example code](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAzAAsybjmMAoIUGYQAL7JqLDCBfAA2qDYSFnJ2OgkZEkgxDCQZPb4Sqi4hFBDMOgEJK1tALrJKBg4+ESk8CC67h7ScmCuFcQA1iANnd3wAIy9-XsggHwbgAG7QyNj+1gwqiGmyweCWrwAwuY+pdpC8grgYE1jDJGMQIJ47A5nPBeOwFvBGLhMGhUDoSDVCOYANT9MBgeRIKnTBYQXgAeSgh0wBP6uCUOUwhDO-CxeAgSGwMAAdIRMAZ5otditQHEDK8ADzfUxgBClEBNGDCVgAETIACYFWDlfqEegIGQHkNprNmM0ICaeiBLDAAG4QV2G92m+DZEBQBS4e37Bx+gD6UEIlqVCDWdXWYYjUZA2BysbR2AMunUmBuq1u2fuZueA32gF4NwD4O99RlmcthULogWgQTsayBIdDYSR4YjhNJZGiMfYnNgccQ8egCUSSWShILqbT6cRGcy7ezOSIeYQ+YwBULGCLp5GJdLZfLkgsrSmVQWNVqdfA9QajcGQI774rlifG0WQdJ0ZigANv09b0-UgoNPXDSMyBjCB40Tf9H3aMt00QrMczzCACyLWVSzTZJPFlcx7lAUxcCQQMyDiMALFgNFogKZJ80LYtdEIQh7nAPjiSGIkj1lTCOn1N0PRDMoYEwKBWkKM1yy-eDHjkhSlOKVTpODKsQARLSih09M4gALyjUBPC6TkigAVmSQ4iLmeBCnsupPKAA)
+
+```{r}
+knitr::include_graphics('./1d.png')
+```
+
+## Problem 2: Build your own model **
+
++ I designed [this](https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAEzJAGa4qFkALMm45jAKCFBmEAC+yaiwwgXwANqg2EgIAAzJ2OgkZEkgxDCQZPb4Sqi4hFBDMOgEJM1tILiYhKowqtjm2FAV8F0AdF1dAMzJC0vEK6ANMMKsACJk50MHuBBkBoQA+lB-g9hCAagBdZKfb7wEDYHJ-NLEJCEMCgzSgdabba7faHE5nYoga5EW4IVbAiAvMgARg+Ci+P3+gL+FNBEJAULIcIR8mRqPByRQGBw+BJZF07g80jkYFcZWIAGs0e1OvBqb1+qQYYAMMkA8H9DEZjGGqDaeVDfQVoLB4G5kADCe3QCukmqCuBgDWMMkYxAgnjsDmc8F47AW8EY6zQqB0JCqhHMAGp+mAwLyE9MFhBeAB5KASzDh-q4JQ5Day-iBvAQJDYGDHQiYAzzRYku4gOIGLUgAB8AF4DaZUfBCRSqTD3lcW8syfdGpTXkdIfToSBfgCgXO2UuGTDub7sAZdOpMMr2weu32B0OAGz1OdjkC0yc3NujhcgTJ0nerpkbx7fAUOWXLl4X3Q9j1PDsL37ZJiEHBB1Xbe930-Z9WxnJD-wfVCgO-NdmVZQDOV3UCIAPI8GzZOoVSyDUBhhQA+DcAGt2DVGFcdlQAZLWFG0xRhB0+mdPoSDdD1hGkWRfX9ewnGwYNiFDdBw0jVBo01ONE2TVMkXTd10CzYhc3zQtCGLRhSxRRgK1kr4azrBsmzQ6dWnuc8yG7K8ELvLD3yfIkp1JFz2z06EemC2ZmGQmkhksGAADcIEinzum3FcHAS9ct1wlc9zI8DKOotYNi2HY9gObpjgAdicwLyRClLwqgJKngXMLYoS5r5wa4jwEIDLASynruURPlILcmFL1g+Dh28lq3mbF8MLfbrgJhfC-xBIjVthUjyIgwqoPcmDhmmxDlphQoFvQoLzrCnr1pZTctu-XK9oK9EiqxUrcQqgBWGrXyixdssZddHv-QbtuG3kUSoj6OgQS5YU1MhAB4NwAmfdYo0OUwCALRSK0RVtfjHSE11bHdT0JJ9P0A1k+TFOU3HVJjIQNk0lFtKQXTMxzPMRBMsyLPLStbNretGyu5zVkxEqcXKo5TjORDiWl2dkour8Vwewj2SG+ERthg7xp7Y64KHM6gZAS6AaWq2bZBtbf3Bza9ah3b8pPcFCoRmbkfokBAF4NwBSXaxlccmwXGhiFa1RQDgSnRdESKbEr1JNpmSgxDMMI2ZtTY3ZpNObTDN9L54yYyFssrNF6txYcqXavVubgfu53dcAzwG3MVVQFMXAkAhmE4jACxYF9aIClgvKKMwXRCEIVVeobfHMRmTBFpuoGwvdDfmgATi6A6gcQ3eoGaakj4+87sjWGA9+6Y+NaRs-miv5uur91-H-ZOIAC9oSgE8B0PMCBfphQlOROY8BwE1DgUAA) grazing model. It incorporates the forest fire model we discussed in class with another plant and a grazer. Ecosystems often exhibit a balance from the influence of multiple interacting factors: plant availability, forest fire prevalance, and the presence/absence of large grazers and browsers. This model explores that interaction with some updated rules.
+
++ The original forest firest rules dictate the relationships between whitespace, trees, and forests.
+
++ Clover appears more often and spreads quicker. However, too many trees (4) and the shade makes it such that the clover can't persist. When enough clover forms a patch, it can support a grazer. The grazer then recruits a herd and wipes out the entire continuous field of clover. 
+
++ Bison are great at finding adjacent clover and will move throughout the entire clover patch, eating up the clover (leaving behind whitespace). Unfortunately they can't survive fire (die if fire) or forest (die if >= 4 neighbors are trees). When they finish a patch, they wander but face a chance of death if they don't find another food source.
+
++ The model pulses between mostly trees to mostly clover. Both fire and bison serve the same purspoe, but under slightly diffferent rules and mechanisms. Ultimately, there is a relatively consistent balance between forest and clover.
+
+```{r}
+knitr::include_graphics('./fire_graze.png')
+```
+
+# Part 2
+
+### Problem 1a
+
++ **Multiple Piles**: To get the ants to consume from multiple piles simultaneously, increase diffusion and decrease evaporation to near 0. 
+
++ **Efficiency**: Low diffusion rate and very low evaporation rate creates a scenario where the ants establish persistent and precise paths to their food quickly and efficiently.
+
++ **Inefficient**: High evaporation and low diffusion makes each ant ends up forging its own random path without collaborating with the rest of the colony. This is very inefficient. Ants should cooperate with their friends and nestmates.
+
+### Problem 1b
+
++ With the food source in between the nest and another food source, the pattern changes. Almost all of the middle food source is consumed before the furthest food source is touched. Instead of all of the food source being consumed at the same time, the further food source is delayed.
+
+```{r}
+knitr::include_graphics('./2_1b.png')
+```
+
++ **Modified Section:**
+
+```
+to setup-food  ;; patch procedure
+  ;; setup food source one on the right
+  if (distancexy (0.8 * max-pxcor) 0) < 6
+  [ set food-source-number 1]
+  ;; setup food source two on the lower-left
+  if (distancexy (-0.8 * max-pxcor) (-0.6 * max-pycor)) < 7
+  [ set food-source-number 2]
+  ;; setup food source three on the upper-left
+  if (distancexy (-0.8 * max-pxcor) (0.8 * max-pycor)) < 3
+  [ set food-source-number 3 ]
+    if (distancexy (0.4 * max-pxcor) 0) < 3
+  [ set food-source-number 4]
+  ;; set "food" at sources to either 1 or 2, randomly
+  if food-source-number > 0
+  [ set food one-of [1 2] ]
+end
+
+to recolor-patch  ;; patch procedure
+  ;; give color to nest and food sources
+  ifelse nest?
+  [ set pcolor violet ]
+  [ ifelse food > 0
+    [ if food-source-number = 1 [ set pcolor cyan ]
+      if food-source-number = 2 [ set pcolor sky  ]
+      if food-source-number = 3 [ set pcolor yellow ] 
+      if food-source-number = 4 [ set pcolor blue ]
+    ]
+    ;; scale color to show chemical concentration
+    [ set pcolor scale-color green chemical 0.1 5 ] ]
+end
+```
+
+### Problem 1c
+
++ The poisened food source has become the last to be consumed, partly because of its distance from the nest (in yellow) and the condition that most of the ants die at or before the fifth tick, leaving few to remain and leave a chemical path back to the poison. Nonetheless, eventually the entire source of poison is consumed and a few of the ants in the nest die as a result.
+
++ 
+
+```{r}
+knitr::include_graphics('./poison1.png')
+```
+
+
+```
+patches-own [
+  chemical             ;; amount of chemical on this patch
+  food                 ;; amount of food on this patch (0, 1, or 2)
+  nest?                ;; true on nest patches, false elsewhere
+  nest-scent           ;; number that is higher closer to the nest
+  food-source-number   ;; number (1, 2, or 3) to identify the food sources
+]
+
+turtles-own [tick-count]
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Setup procedures ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+to setup
+  clear-all
+  set-default-shape turtles "bug"
+  create-turtles population
+  [ set size 2         ;; easier to see
+    set color red  
+    set tick-count 0
+  ]   ;; red = not carrying food
+  setup-patches
+  reset-ticks
+end
+
+to setup-patches
+  ask patches
+  [ setup-nest
+    setup-food
+    recolor-patch ]
+end
+
+to setup-nest  ;; patch procedure
+  ;; set nest? variable to true inside the nest, false elsewhere
+  set nest? (distancexy 0 0) < 5
+  ;; spread a nest-scent over the whole world -- stronger near the nest
+  set nest-scent 200 - distancexy 0 0
+end
+
+to setup-food  ;; patch procedure
+  ;; setup food source one on the right
+  if (distancexy (0.8 * max-pxcor) 0) < 6
+  [ set food-source-number 1]
+  ;; setup food source two on the lower-left
+  if (distancexy (-0.8 * max-pxcor) (-0.6 * max-pycor)) < 7
+  [ set food-source-number 2]
+  ;; setup food source three on the upper-left
+  if (distancexy (-0.8 * max-pxcor) (0.8 * max-pycor)) < 3
+  [ set food-source-number 3 ]
+    if (distancexy (0.4 * max-pxcor) 0) < 3
+  [ set food-source-number 4]
+  ;; set "food" at sources to either 1 or 2, randomly
+  if food-source-number > 0
+  [ set food one-of [1 2] ]
+end
+
+to recolor-patch  ;; patch procedure
+  ;; give color to nest and food sources
+  ifelse nest?
+  [ set pcolor violet ]
+  [ ifelse food > 0
+    [ if food-source-number = 1 [ set pcolor cyan ]
+      if food-source-number = 2 [ set pcolor sky  ]
+      if food-source-number = 3 [ set pcolor yellow ] 
+      if food-source-number = 4 [ set pcolor blue ]
+    ]
+    ;; scale color to show chemical concentration
+    [ set pcolor scale-color green chemical 0.1 5 ] ]
+end
+
+;;;;;;;;;;;;;;;;;;;;;
+;;; Go procedures ;;;
+;;;;;;;;;;;;;;;;;;;;;
+
+to go  ;; forever button
+  ask turtles
+  [ if who >= ticks [ stop ] ;; delay initial departure
+    ifelse color = red
+    [ look-for-food  ]       ;; not carrying food? look for it
+    [ return-to-nest ]       ;; carrying food? take it back to nest
+    wiggle
+    fd 1 ]
+  diffuse chemical (diffusion-rate / 100)
+  ask patches
+  [ set chemical chemical * (100 - evaporation-rate) / 100  ;; slowly evaporate chemical
+    recolor-patch ]
+  tick
+end
+
+to return-to-nest  ;; turtle procedure
+  ifelse nest?
+  [ ;; drop food and head out again
+    set color red
+    rt 180 ]
+  [ set chemical chemical + 60  ;; drop some chemical
+    ;; at the fifth check again and die
+    if food-source-number = 3 [ 
+      if tick-count = 5 [
+        let die-prob random-float 1
+        if die-prob < 0.5 [ die ] ;; killlllll
+      ]
+    ]
+    uphill-nest-scent 
+    set tick-count tick-count + 1
+  ] ;; head toward the greatest value of nest-scent
+end
+
+to look-for-food  ;; turtle procedure
+  if food > 0
+  [ set color orange + 1     ;; pick up food
+    set food food - 1        ;; and reduce the food source
+    set tick-count 0 
+    if food-source-number = 3 [ 
+      let die-prob random-float 1
+      if die-prob < 0.5 [
+        die ] ;; killlllll
+    ]
+    rt 180                   ;; and turn around
+    stop ]
+  ;; go in the direction where the chemical smell is strongest
+  if (chemical >= 0.05) and (chemical < 2)
+  [ uphill-chemical ]
+end
+
+;; sniff left and right, and go where the strongest smell is
+to uphill-chemical  ;; turtle procedure
+  let scent-ahead chemical-scent-at-angle   0
+  let scent-right chemical-scent-at-angle  45
+  let scent-left  chemical-scent-at-angle -45
+  if (scent-right > scent-ahead) or (scent-left > scent-ahead)
+  [ ifelse scent-right > scent-left
+    [ rt 45 ]
+    [ lt 45 ] ]
+end
+
+;; sniff left and right, and go where the strongest smell is
+to uphill-nest-scent  ;; turtle procedure
+  let scent-ahead nest-scent-at-angle   0
+  let scent-right nest-scent-at-angle  45
+  let scent-left  nest-scent-at-angle -45
+  if (scent-right > scent-ahead) or (scent-left > scent-ahead)
+  [ ifelse scent-right > scent-left
+    [ rt 45 ]
+    [ lt 45 ] ]
+end
+
+to wiggle  ;; turtle procedure
+  rt random 40
+  lt random 40
+  if not can-move? 1 [ rt 180 ]
+end
+
+to-report nest-scent-at-angle [angle]
+  let p patch-right-and-ahead angle 1
+  if p = nobody [ report 0 ]
+  report [nest-scent] of p
+end
+
+to-report chemical-scent-at-angle [angle]
+  let p patch-right-and-ahead angle 1
+  if p = nobody [ report 0 ]
+  report [chemical] of p
+end
+
+
+; Copyright 1997 Uri Wilensky.
+; See Info tab for full copyright and license.
+```
+
+### Problem 1D
+
++ I've included a picture of the model and the code below.
+
++ This was an interesting excercise, but I don't think it is very effective for the ants—-or at least the rules should be modified slightly. With the rules for the nest scent, the chemical diffuses as the ant moves further away from the nest. In other words, if you were to take a snapshot of a single ant and its nest scent trail, the trail is most potent at its current position (25 ticks away from the nest) while the area closest to the nest is less concentrated because of the patterns of diffusion/evaporation. As a result, the ants with food tend to group in bunches *near,* but not *at* the nest. They look like confused ants.
+
++ The two situations
+
+
+```{r}
+knitr::include_graphics('./ants_paths.png')
+```
+
+
+
+```
+patches-own [
+  chemical             ;; amount of chemical on this patch
+  food                 ;; amount of food on this patch (0, 1, or 2)
+  nest?                ;; true on nest patches, false elsewhere
+  nest-scent           ;; number that is higher closer to the nest
+  food-source-number   ;; number (1, 2, or 3) to identify the food sources
+]
+
+turtles-own [
+  tick-count
+  nest-dist
+]
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Setup procedures ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+to setup
+  clear-all
+  set-default-shape turtles "bug"
+  create-turtles population
+  [ set size 2         ;; easier to see
+    set color red
+    set tick-count 0
+    set nest-dist 0
+  ]   ;; red = not carrying food
+  setup-patches
+  reset-ticks
+end
+
+to setup-patches
+  ask patches
+  [ setup-nest
+    setup-food
+    recolor-patch ]
+end
+
+to setup-nest  ;; patch procedure
+  ;; set nest? variable to true inside the nest, false elsewhere
+  set nest? (distancexy 0 0) < 5
+  ;; spread a nest-scent over the whole world -- stronger near the nest
+  ;; removed nest-scent distributed across the whole world
+  ;; set nest-scent 200 - distancexy 0 0
+end
+
+to setup-food  ;; patch procedure
+  ;; setup food source one on the right
+  if (distancexy (0.8 * max-pxcor) 0) < 6
+  [ set food-source-number 1]
+  ;; setup food source two on the lower-left
+  if (distancexy (-0.8 * max-pxcor) (-0.6 * max-pycor)) < 7
+  [ set food-source-number 2]
+  ;; setup food source three on the upper-left
+  if (distancexy (-0.8 * max-pxcor) (0.8 * max-pycor)) < 3
+  [ set food-source-number 3 ]
+    if (distancexy (0.4 * max-pxcor) 0) < 3
+  [ set food-source-number 4]
+  ;; set "food" at sources to either 1 or 2, randomly
+  if food-source-number > 0
+  [ set food one-of [1 2] ]
+end
+
+to recolor-patch  ;; patch procedure
+  ;; give color to nest and food sources
+  ifelse nest?
+  [ set pcolor violet ]
+  [ ifelse food > 0
+    [ if food-source-number = 1 [ set pcolor cyan ]
+      if food-source-number = 2 [ set pcolor sky  ]
+      if food-source-number = 3 [ set pcolor yellow ]
+      if food-source-number = 4 [ set pcolor blue ]
+    ]
+    ;; scale color to show chemical concentration
+    [ set pcolor scale-color yellow nest-scent 0.1 5
+      if chemical >= 1 [
+        set pcolor scale-color green chemical 0.1 5
+       ]
+    ]
+  ]
+end
+
+;;;;;;;;;;;;;;;;;;;;;
+;;; Go procedures ;;;
+;;;;;;;;;;;;;;;;;;;;;
+
+to go  ;; forever button
+  ask turtles
+  [ if who >= ticks [ stop ] ;; delay initial departure
+    ifelse color = red
+    [ look-for-food  ]       ;; not carrying food? look for it
+    [ return-to-nest ]       ;; carrying food? take it back to nest
+    wiggle
+    set nest-dist nest-dist + 1
+    fd 1 ]
+  diffuse chemical (diffusion-rate / 100)
+  diffuse nest-scent (nest-diffusion-rate / 100)
+  ask patches
+  [ set chemical chemical * (100 - evaporation-rate) / 100  ;; slowly evaporate chemical
+    set nest-scent nest-scent * (100 - nest-evaporation-rate) / 100
+    recolor-patch ]
+  tick
+end
+
+to return-to-nest  ;; turtle procedure
+  ifelse nest?
+  [ ;; drop food and head out again
+    set nest-dist 0 ;; reset the nest distance
+    set color red
+    rt 180 ]
+  [ set chemical chemical + 60  ;; drop some chemical
+    ;; at the fifth check again and die
+    if food-source-number = 3 [
+      if tick-count = 5 [
+        let die-prob random-float 1
+        if die-prob < 0.5 [ die ] ;; killlllll
+      ]
+    ]
+    uphill-nest-scent
+    set tick-count tick-count + 1
+  ] ;; head toward the greatest value of nest-scent
+end
+
+to look-for-food  ;; turtle procedure
+  if food > 0
+  [ set color orange + 1     ;; pick up food
+    set food food - 1        ;; and reduce the food source
+    set tick-count 0
+    if food-source-number = 3 [
+      let die-prob random-float 1
+      if die-prob < 0.5 [
+        die ] ;; killlllll
+    ]
+    rt 180                   ;; and turn around
+    stop ]
+  ;; go in the direction where the chemical smell is strongest
+  if (chemical >= 0.05) and (chemical < 2)
+  [ uphill-chemical ]
+
+  ;; drop the nest scnet
+  if nest-dist < 25 [
+    set nest-scent nest-scent + 60 ;; drop the nest scent
+  ]
+
+end
+
+;; sniff left and right, and go where the strongest smell is
+to uphill-chemical  ;; turtle procedure
+  let scent-ahead chemical-scent-at-angle   0
+  let scent-right chemical-scent-at-angle  45
+  let scent-left  chemical-scent-at-angle -45
+  if (scent-right > scent-ahead) or (scent-left > scent-ahead)
+  [ ifelse scent-right > scent-left
+    [ rt 45 ]
+    [ lt 45 ] ]
+end
+
+;; sniff left and right, and go where the strongest smell is
+to uphill-nest-scent  ;; turtle procedure
+  let scent-ahead nest-scent-at-angle   0
+  let scent-right nest-scent-at-angle  45
+  let scent-left  nest-scent-at-angle -45
+  if (scent-right > scent-ahead) or (scent-left > scent-ahead)
+  [ ifelse scent-right > scent-left
+    [ rt 45 ]
+    [ lt 45 ] ]
+end
+
+to wiggle  ;; turtle procedure
+  rt random 40
+  lt random 40
+  if not can-move? 1 [ rt 180 ]
+end
+
+to-report nest-scent-at-angle [angle]
+  let p patch-right-and-ahead angle 1
+  if p = nobody [ report 0 ]
+  report [nest-scent] of p
+end
+
+to-report chemical-scent-at-angle [angle]
+  let p patch-right-and-ahead angle 1
+  if p = nobody [ report 0 ]
+  report [chemical] of p
+end
+
+
+; Copyright 1997 Uri Wilensky.
+; See Info tab for full copyright and license.
+```
+
+## Problem 2: Build a Simple model
+
+```{r,  fig.show="hold", out.width="50%"}
+knitr::include_graphics('./2.2.1.png')
+knitr::include_graphics('./2.2.2.png')
+knitr::include_graphics('./2.2.3.png')
+knitr::include_graphics('./2.2.4.png')
+```
+
++ **Code:**
+
+```
+;; setup 
+
+to setup
+  clear-all
+  create-turtles 10
+  set-default-shape turtles "fish"
+end
+
+to go 
+  move
+  ;; Update their own color to match the color of the patch they are on, 
+  ;; unless they are on a black patch
+  if pcolor != black [
+    set color pcolor
+  ]
+  set pcolor color
+end
+
+to move
+  let potential-rotation 45
+  rt potential-rotation - random (potential-rotation * 2)
+  ;; lt random 40
+  fd 1
+end
+```
+
+# Part 3
+
+## Problem 1: The Chaos Game
+
+```{r}
+knitr::include_graphics('./chaos_game.png')
+```
+
++ **Code:**
+
+```
+# This is the chaos game
+from math import *                  # useful math functions
+import numpy as np                  # useful array objects 
+                                    # (also a core scientific computing library)
+import matplotlib.pyplot as plt     # nice plotting commands
+from random import random, randint  # random number generation functions
+
+# takes in two tuples and returns a new tuple
+# a midpoint between two points
+def midpoint(x, y):
+    # tuples are 0 indexed
+    xcoord = 0.5 * (x[0] + y[0])
+    ycoord = 0.5 * (x[1] + y[1])
+    return (xcoord, ycoord)
+
+# list calle d corder
+corner = [
+    (0,0),
+    (1,0),
+    (0.5, sqrt(3)/2)
+    ]
+
+# number of total points
+N = 1000
+
+# lists for our coordinates
+x = np.zeros(N)
+y = np.zeros(N)
+
+# starting position
+x[0] =  random()
+y[0] = random()
+
+# loop through and run the chaos game
+for i in range(1, N):
+    vertex = np.random.randint(0, 3)
+    mid_calc = midpoint(corner[vertex], (x[i-1], y[i-1]))
+    x[i] = mid_calc[0]
+    y[i] = mid_calc[1]
+
+# plot it all
+plt.figure()
+plt.scatter(x, y)
+plt.scatter((0,1,0.5),(0,0,sqrt(3)/2),color='red') # plot the triangle vertices
+plt.show()
+```
+
+# Final Project Ideas
+
++ I really like ants, ant social behaviour, and ant evolution. I would be interested to use ABMs to answer questions about competing ant colonies or evolutionarily interesting questions about the balance between relatedness, colony structure, strategy, etc.
+
++ Pollinaror networks are fascinating. We haven't talked about networks yet, but I would be very interested in looking at properties of communities and their consequences for these networks.
+
++ Generally I am interested in ecology, evolution, and species interactions (networks, competition, predator/prey).
