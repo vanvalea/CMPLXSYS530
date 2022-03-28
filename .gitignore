@@ -1,7 +1,7 @@
 # ignore PDFs
 *.pdf
 *.png
-
+*.DS_store
 
 
 
