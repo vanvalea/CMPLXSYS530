@@ -1,9 +1,7 @@
 # ignore PDFs
 *.pdf
 *.png
-
-
-
+*.DS_Store
 
 # Xcode
 #
